@@ -15,6 +15,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $user_id = $_SESSION['user_id'];
     $title = $_POST['title'];
     $content = $_POST['content'];
+    if(empty($title)){
+    die("Title is required");
+}
+
+if(empty($content)){
+    die("Content is required");
+}
 
     $sql = "INSERT INTO posts(user_id, title, content)
             VALUES('$user_id', '$title', '$content')";
@@ -40,19 +47,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 <form method="POST">
 
-    <input type="text"
-           name="title"
-           placeholder="Post Title"
-           required><br><br>
+    <input
+        type="text"
+        name="title"
+        class="form-control"
+        required
+        minlength="3"
+    >
 
-    <textarea name="content"
-              rows="8"
-              cols="50"
-              placeholder="Write your blog..."
-              required></textarea><br><br>
+    <br>
 
-    <button type="submit">
-        Publish Post
+    <textarea
+        name="content"
+        class="form-control"
+        required
+        minlength="10"
+    ></textarea>
+
+    <br>
+
+    <button type="submit" class="btn btn-success">
+        Create Post
     </button>
 
 </form>

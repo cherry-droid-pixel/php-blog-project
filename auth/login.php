@@ -1,6 +1,13 @@
 <?php
 session_start();
-include "../config/database.php";
+// Load database connection. Use absolute path based on this file's directory.
+require_once __DIR__ . '/../config/database.php';
+
+// Ensure $conn is available
+if (!isset($conn) || !$conn) {
+    // stop execution with a clear message
+    die('Database connection not available.');
+}
 
 $message = "";
 

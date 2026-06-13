@@ -1,5 +1,14 @@
 <?php
-include "../config/database.php";
+require_once __DIR__ . "/../config/database.php";
+
+// Ensure $conn is available. If the included file didn't set it, create a fallback connection.
+if (!isset($conn) || $conn === null) {
+    // Fallback - adjust these credentials if your environment is different.
+    $conn = mysqli_connect('localhost', 'root', '', 'blog');
+    if (!$conn) {
+        die('Database connection failed: ' . mysqli_connect_error());
+    }
+}
 
 $message = "";
 
@@ -9,14 +18,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST["email"]);
     $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users (username, email, password)
-            VALUES ('$username', '$email', '$password')";
+    $sql = "INSERT INTO users
+(username,email,password,role)
+VALUES (?,?,?,?)";
 
-    if (mysqli_query($conn, $sql)) {
-        $message = "Registration Successful!";
-    } else {
-        $message = "Error: " . mysqli_error($conn);
-    }
+$stmt = mysqli_prepare($conn,$sql);
+
+$role = "user";
+
+mysqli_stmt_bind_param(
+$stmt,
+"ssss",
+$username,
+$email,
+$password,
+$role
+);
 }
 ?>
 

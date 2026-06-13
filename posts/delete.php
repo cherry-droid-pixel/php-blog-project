@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+if($_SESSION['role'] != 'admin'){
+    die("Access Denied");
+}
+?>
+<?php
+session_start();
 require_once __DIR__ . '/../config/database.php';
 
 // Check if user is logged in
